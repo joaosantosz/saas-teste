@@ -8,8 +8,9 @@ export default function Home() {
   const [imagem, setImagem] = useState("");
   const [video, setVideo] = useState("");
   const [loading, setLoading] = useState(false);
+  const [linkDeclaracao, setLinkDeclaracao] = useState("");
 
-  // Função simples para gerar slug a partir do título
+  // Função para gerar slug amigável
   function gerarSlug(texto) {
     return texto
       .toLowerCase()
@@ -32,8 +33,10 @@ export default function Home() {
     if (error) {
       alert("❌ Erro ao salvar: " + error.message);
     } else {
-      alert(`✅ Declaração salva! Acesse seu link: https://seu-site.vercel.app/declaracao/${slug}`);
-      // Limpa o formulário
+      const url = `https://seu-site.vercel.app/declaracao/${slug}`;
+      setLinkDeclaracao(url);
+
+      // Limpa o formulário se quiser
       setTitulo("");
       setMensagem("");
       setImagem("");
@@ -91,6 +94,37 @@ export default function Home() {
           {loading ? "Enviando..." : "Salvar Declaração"}
         </button>
       </form>
+
+      {linkDeclaracao && (
+        <div style={{ marginTop: 20, textAlign: "center" }}>
+          <p>✅ Declaração salva! Acesse ou copie seu link:</p>
+          <input
+            type="text"
+            value={linkDeclaracao}
+            readOnly
+            style={{
+              width: "100%",
+              padding: 10,
+              borderRadius: 8,
+              border: "1px solid #ccc",
+              marginBottom: 10,
+            }}
+          />
+          <button
+            onClick={() => navigator.clipboard.writeText(linkDeclaracao)}
+            style={{
+              background: "#0070f3",
+              color: "#fff",
+              padding: "10px",
+              borderRadius: 8,
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Copiar Link
+          </button>
+        </div>
+      )}
     </div>
   );
 }
