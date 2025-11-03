@@ -10,7 +10,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [linkDeclaracao, setLinkDeclaracao] = useState("");
 
-  // Função para gerar slug amigável
+  // Gera slug amigável
   function gerarSlug(texto) {
     return texto
       .toLowerCase()
