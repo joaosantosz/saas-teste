@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
-import Link from "next/link";
 
 export default function Home() {
   const [titulo, setTitulo] = useState("");
@@ -10,22 +9,38 @@ export default function Home() {
   const [video, setVideo] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Função simples para gerar slug a partir do título
+  function gerarSlug(texto) {
+    return texto
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")       // espaços viram hífen
+      .replace(/[^\w-]+/g, "");   // remove caracteres inválidos
+  }
+
   const enviarFormulario = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = await supabase
-      .from("declaracoes")
-      .insert([{ titulo, mensagem, imagem_url: imagem, video_url: video }]);
+    const slug = gerarSlug(titulo);
 
-    if (error) alert("❌ Erro ao salvar: " + error.message);
-    else alert("✅ Declaração salva com sucesso!");
+    const { data, error } = await supabase
+      .from("declaracoes")
+      .insert([{ titulo, mensagem, imagem_url: imagem, video_url: video, slug }])
+      .select(); // retorna a linha inserida
+
+    if (error) {
+      alert("❌ Erro ao salvar: " + error.message);
+    } else {
+      alert(`✅ Declaração salva! Acesse seu link: https://seu-site.vercel.app/declaracao/${slug}`);
+      // Limpa o formulário
+      setTitulo("");
+      setMensagem("");
+      setImagem("");
+      setVideo("");
+    }
 
     setLoading(false);
-    setTitulo("");
-    setMensagem("");
-    setImagem("");
-    setVideo("");
   };
 
   return (
@@ -76,21 +91,6 @@ export default function Home() {
           {loading ? "Enviando..." : "Salvar Declaração"}
         </button>
       </form>
-
-      {/* Botão para ir para listagem */}
-      <Link
-        href="/listar"
-        style={{
-          display: "block",
-          textAlign: "center",
-          marginTop: "15px",
-          color: "#0070f3",
-          fontWeight: "bold",
-          textDecoration: "none",
-        }}
-      >
-        📄 Ver todas as declarações
-      </Link>
     </div>
   );
 }
