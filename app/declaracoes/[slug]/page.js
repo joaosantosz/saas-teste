@@ -9,8 +9,12 @@ export default async function Declaracao({ params }) {
     .eq("slug", slug)
     .single();
 
-  if (error || !data) {
-    return <p style={{ textAlign: "center" }}>❌ Declaração não encontrada 😢</p>;
+  if (!data || error) {
+    return (
+      <p style={{ textAlign: "center", marginTop: 50 }}>
+        ❌ Declaração não encontrada 😢
+      </p>
+    );
   }
 
   const videoEmbed = data.video_url
