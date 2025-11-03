@@ -28,20 +28,21 @@ export default function Home() {
     const { data, error } = await supabase
       .from("declaracoes")
       .insert([{ titulo, mensagem, imagem_url: imagem, video_url: video, slug }])
-      .select(); // retorna a linha inserida
+      .select();
 
     if (error) {
       alert("❌ Erro ao salvar: " + error.message);
     } else {
-      const url = `https://seu-site.vercel.app/declaracao/${slug}`;
+      const url = `${window.location.origin}/declaracao/${slug}`;
       setLinkDeclaracao(url);
 
-      // Limpa o formulário se quiser
+      // Limpa o formulário
       setTitulo("");
       setMensagem("");
       setImagem("");
       setVideo("");
     }
+
 
     setLoading(false);
   };
@@ -110,19 +111,20 @@ export default function Home() {
               marginBottom: 10,
             }}
           />
-          <button
-            onClick={() => navigator.clipboard.writeText(linkDeclaracao)}
-            style={{
-              background: "#0070f3",
-              color: "#fff",
-              padding: "10px",
-              borderRadius: 8,
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Copiar Link
-          </button>
+          <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+            <button
+              onClick={() => window.open(linkDeclaracao, "_blank")}
+              style={botaoEstilo}
+            >
+              Abrir Declaração
+            </button>
+            <button
+              onClick={() => navigator.clipboard.writeText(linkDeclaracao)}
+              style={botaoEstilo}
+            >
+              Copiar Link
+            </button>
+          </div>
         </div>
       )}
     </div>
