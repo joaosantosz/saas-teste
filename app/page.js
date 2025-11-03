@@ -15,8 +15,8 @@ export default function Home() {
     return texto
       .toLowerCase()
       .trim()
-      .replace(/\s+/g, "-")       // espaços viram hífen
-      .replace(/[^\w-]+/g, "");   // remove caracteres inválidos
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]+/g, "");
   }
 
   const enviarFormulario = async (e) => {
@@ -36,13 +36,11 @@ export default function Home() {
       const url = `${window.location.origin}/declaracao/${slug}`;
       setLinkDeclaracao(url);
 
-      // Limpa o formulário
       setTitulo("");
       setMensagem("");
       setImagem("");
       setVideo("");
     }
-
 
     setLoading(false);
   };
